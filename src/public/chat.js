@@ -37,7 +37,7 @@ socketClient.on("messages", (data) => {
   const chatRender = data
     .map((message) => {
       return `
-    <div class="message">
+    <div>
       <strong>${message.username}</strong>:
       <p>${message.message}</p>
     </div>
