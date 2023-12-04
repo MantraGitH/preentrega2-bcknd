@@ -24,17 +24,12 @@ const PORT = 8080;
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(express.static(__dirname + "/src/public"));
-
 server.use("/api/products", productRouter);
 server.use("/api/carts", cartRouter);
-
 server.engine("handlebars", handlebars.engine());
 server.set("views", __dirname + "/src/views");
 server.set("view engine", "handlebars");
 server.use("/", viewsRouter);
-server.use("/realtimeproducts", viewsRouter);
-server.use("/chat", viewsRouter);
-
 server.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: "Internal Server Error" });
@@ -43,17 +38,17 @@ server.use((err, req, res, next) => {
 if (persistence === "MONGO") await initMongoDB();
 
 const httpServer = server.listen(PORT, () => {
-  console.log(`Server corriendo en puerto: ${PORT}`);
+  console.log(`Server running on port: ${PORT}`);
 });
 export const socketServer = new Server(httpServer);
 
 socketServer.on("connection", async (socket) => {
-  console.log(`cliente conectado ${socket.id}`);
+  console.log(`🟢 Client connected ${socket.id}`);
   socketServer.emit("messages", await messageManager.getAll());
   socket.on("disconnect", () => {
-    console.log(`cliente desconectado ${socket.id}`);
+    console.log(`🔴 Client disconnected ${socket.id}`);
   });
-  socket.on("newUser", (user) => console.log(` ${user} hse ha conectado`));
+  socket.on("newUser", (user) => console.log(`⏩ ${user} has connected`));
   socket.on("chat:message", async (message) => {
     await messageManager.create(message);
     socketServer.emit("messages", await messageManager.getAll());
