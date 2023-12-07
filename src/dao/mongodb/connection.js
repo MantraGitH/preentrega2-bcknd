@@ -1,6 +1,6 @@
 import { connect } from "mongoose";
 
-const MONGO_URL ="mongodb://localhost:27017/";
+const MONGO_URL ="mongodb+srv://camiloarias56:camiloarias56@clusterprdm.as8xfkk.mongodb.net/ecommerce?retryWrites=true&w=majority";
 export const initMongoDB = async () => {
   try {
     await connect(MONGO_URL);
